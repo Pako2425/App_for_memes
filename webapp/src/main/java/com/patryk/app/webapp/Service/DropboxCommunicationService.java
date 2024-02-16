@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -29,10 +28,10 @@ public class DropboxCommunicationService {
     private static String ACCESS_TOKEN = "sl.BtFTXpmy4y1l1knSN9DrclF4yRPz7VS6JoZtAQGRC5KDiX_n2mzDy_8gPLkj1OdCpvuGMG7HbWT29J7rqwydwKU0rTkhZsbiWExihPqQWJ8i_yQjeqOw3WenrZnfrysLAUB_W7jmnqrhmb4";
     DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
 
-    private String clientId = "pgur7x6tw12qoh1";
-    private String clientSecret = "n3vbftnk5sfemym";
-    private String tokenUrl = "https://api.dropbox.com/oauth2/token";
-    private String refreshToken = "-c_nmGpq9Y8AAAAAAAAAAfnh1lmXjfCakCuuVq9aa4PHPwHSjY2iMp95cDjG0Vgz";
+    private final String clientId = "pgur7x6tw12qoh1";
+    private final String clientSecret = "n3vbftnk5sfemym";
+    private final String tokenUrl = "https://api.dropbox.com/oauth2/token";
+    private final String refreshToken = "-c_nmGpq9Y8AAAAAAAAAAfnh1lmXjfCakCuuVq9aa4PHPwHSjY2iMp95cDjG0Vgz";
 
 
     public String saveImage(MultipartFile image, String path) throws IOException, DbxException {
@@ -48,7 +47,6 @@ public class DropboxCommunicationService {
             Metadata uploadedFile = uploadImage(client, image, path);
             imageSharedLink = getImageShareUrl(client, uploadedFile);
         }
-        System.out.println(imageSharedLink);
         return imageSharedLink;
     }
 

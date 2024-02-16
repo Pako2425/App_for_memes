@@ -11,4 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadedMemeDAO {
     private String title;
     private MultipartFile image;
+    private long userId;
+
 }

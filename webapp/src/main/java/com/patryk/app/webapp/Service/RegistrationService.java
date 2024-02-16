@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 
 public class RegistrationService {
-
     private final UsersRepository usersRepository;
     private final UserService userService;
 
@@ -47,11 +46,9 @@ public class RegistrationService {
 
     public RegistrationDataStatus register(RegistrationDAO registrationDAO) {
         RegistrationDataStatus registrationDataStatus = registerDataCheck(registrationDAO);
-
         if(registrationDataStatus == RegistrationDataStatus.SUCCESS) {
             userService.save(registrationDAO);
         }
-
         return registrationDataStatus;
     }
 }

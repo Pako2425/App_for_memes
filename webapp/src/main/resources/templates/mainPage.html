@@ -27,6 +27,14 @@
     font-weight: bold;
   }
 
+  .user-profile-text {
+    font-family: Arial;
+    font-size: 14px;
+    width: 720px;
+    margin-left: 0px;
+
+  }
+
   .header {
     background-color: rgb(0,160,0);
     margin-bottom: 80px;
@@ -91,8 +99,9 @@
     display: inline-block;
     background-color: white;
     width: 800px;
+    height: auto;
     border-radius: 6px;
-    margin-bottom: 80px;
+    margin-bottom: 6px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
   }
 
@@ -101,6 +110,7 @@
     object-fit: contain;
     display: inline-block;
     margin-bottom: 50px;
+    cursor: pointer;
   }
 
   .hidden-ref-link {
@@ -111,6 +121,88 @@
     height: 100%;
     overflow: hidden;
    }
+
+   .ui-actions {
+      display: inline-block;
+      background-color: rgb(255,255,255);
+      width: 800px;
+      height: 60px;
+      margin-bottom: 50px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    }
+
+    .ui-actions-container {
+      width: 400px;
+      margin-left: 40px;
+      margin-top: 20px;
+    }
+
+    .favorite-button {
+      display: inline-block;
+      width: 120px;
+      height: 27px;
+      background-color: rgb(255, 255, 255);
+      border: solid;
+      border-color: rgb(255, 255, 255);
+      border-radius: 4px;
+    }
+
+    .favorite-button:hover {
+      background-color: rgb(234, 234, 234);
+      border-color: rgb(234,234,234);
+      cursor: pointer;
+    }
+
+    .favorite-button:active {
+      background-color: rgb(255, 0 ,255);
+    }
+
+    .comments-button {
+      display: inline-block;
+      width: 120px;
+      height: 27px;
+      background-color: rgb(255, 255, 255);
+      border: solid;
+      border-color: rgb(255, 255, 255);
+      border-radius: 4px;
+    }
+
+    .comments-button:hover {
+      background-color: rgb(234, 234, 234);
+      border-color: rgb(234,234,234);
+      cursor: pointer;
+    }
+
+    .download-button {
+      display: inline-block;
+      width: 120px;
+      height: 27px;
+      background-color: rgb(255, 255, 255);
+      border: solid;
+      border-color: rgb(255, 255, 255);
+      border-radius: 4px;
+    }
+
+    .download-button:hover {
+      background-color: rgb(234, 234, 234);
+      border-color: rgb(234,234,234);
+      cursor: pointer;
+    }
+
+    .user-profile-button {
+      background-color: rgb(255, 255, 255);
+      border: solid;
+      border-color: rgb(255, 255, 255);
+      border-radius: 4px;
+    }
+
+    .user-profile-button:hover {
+      background-color: rgb(234, 234, 234);
+      border-color: rgb(234,234,234);
+      cursor: pointer;
+    }
+
 </style>
 </head>
 
@@ -126,14 +218,33 @@
             </p>
         </div>
 
-        <div class="mem" th:each="post : ${posts}">
-            <div class="mem-tytul">
-                <p class="title-text">
-                    <span th:text="${post.title}"></span>
-                </p>
+        <div th:each="post : ${posts}">
+            <div class="mem">
+                <div class="user-profile" style="margin-left: 10px; margin-top: 10px;">
+                    <button class="user-profile-button">
+                        <img style="display: inline-block; vertical-align: middle;" src="/static/person.svg" width="48px" height="48px">
+                        <span class="user-profile-text"><span th:text="${post.username}"></span></span>
+                    </button>
+                </div>
+                <div class="mem-tytul">
+                    <p class="title-text"><span th:text="${post.title}"></span></p>
+                </div>
+                <div class="mem-obrazek">
+                    <a th:href="@{'/meme/' + ${post.memeId}}"><img class="image" th:src="${post.imagePath}"></a>
+                </div>
             </div>
-            <div class="mem-obrazek">
-                <img class="image" th:src="${post.imagePath}">
+            <div class="ui-actions">
+                <div class="ui-actions-container">
+                    <span th:if="${isAuthenticated}">
+                        <a th:if="${post.isLiked}" th:href="@{'/meme/' + ${post.memeId}}"><button class="favorite-button"><img style="vertical-align: middle;" src="/static/favorite_fill.svg"><span style="vertical-align: middle;" th:text="${post.likesNumber}"></span></button></a>
+                        <a th:unless="${post.isLiked}" th:href="@{'/meme/' + ${post.memeId}}"><button class="favorite-button"><img style="vertical-align: middle;" src="/static/favorite_outline.svg"><span style="vertical-align: middle;" th:text="${post.likesNumber}"></span></button></a>
+                    </span>
+                    <span th:unless="${isAuthenticated}">
+                        <a th:href="@{'/meme/' + ${post.memeId}}"><button class="favorite-button"><img style="vertical-align: middle;" src="/static/favorite_outline.svg"><span style="vertical-align: middle;" th:text="${post.likesNumber}"></span></button></a>
+                    </span>
+                    <a th:href="@{'/meme/' + ${post.memeId}}"><button class="comments-button"><img style="vertical-align: middle;" src="/static/comment.svg"><span style="vertical-align: middle;" th:text="${post.commentsNumber}"></span></button></a>
+                    <button class="download-button"><img style="vertical-align: middle;" src="/static/download.svg"></button>
+                </div>
             </div>
         </div>
 

@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class OperationResultDAO {
-    private boolean sucess;
+    private boolean success;
     private String message;
 }

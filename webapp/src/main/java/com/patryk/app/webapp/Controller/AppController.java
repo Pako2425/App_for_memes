@@ -13,17 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Map;
 
-
 @Controller
 @AllArgsConstructor
 public class AppController {
-
     private final RegistrationService registrationService;
     private final PaginationService paginationService;
     private final UploadMemeService uploadMemeService;
     private final AdminPanelService adminPanelService;
     private final SecurityService securityService;
-
+    private final UIActionsService uiActionsService;
     private final DropboxCommunicationService dropboxCommunicationService;
 
     private static final String MAIN_PAGE = "mainPage";
@@ -65,7 +63,8 @@ public class AppController {
     }
 
     @GetMapping(value = "/add_meme")
-    public String post() {
+    public String post(Model model, Authentication authentication) {
+        securityService.authenticate(authentication, model);
         return POST_MEME_FORM;
     }
 
@@ -117,6 +116,13 @@ public class AppController {
         return ADMIN_PANEL_PAGE;
     }
 
+    @GetMapping(value = "/meme/{meme_id}")
+    public String showMeme(@PathVariable long meme_id, Model model, Authentication authentication) {
+        securityService.authenticate(authentication, model);
+        paginationService.showDetailedPost(meme_id, model);
+        return "detailedMeme";
+    }
+
     @PostMapping(value = "/admin_users_status_update")
     public String handleAdminUsersActions(@RequestParam("id") long userId,
                                      @RequestParam("unlock") boolean unlock,
@@ -144,8 +150,26 @@ public class AppController {
     }
 
     @PostMapping(value = "/post_meme")
-    public String uploadImage(@ModelAttribute UploadedMemeDAO uploadedMemeDAO)  throws IOException, DbxException {
+    public String uploadImage(@ModelAttribute UploadedMemeDAO uploadedMemeDAO) throws IOException, DbxException {
+        System.out.println(uploadedMemeDAO.getUserId());
+        System.out.println(uploadedMemeDAO.getTitle());
         uploadMemeService.saveMeme(uploadedMemeDAO);
+
         return "redirect:/";
+    }
+
+    @PostMapping(value = "/ui_actions_favorite")
+    public String handleUiFavoriteActions(@ModelAttribute UiFavoriteActionDAO uiFavoriteActionDAO) {
+        uiActionsService.updateLikes(uiFavoriteActionDAO);
+        return "redirect:" + uiFavoriteActionDAO.getUrl();
+    }
+
+    @PostMapping(value = "/ui_actions_comment")
+    public String handleUiCommentActions(@RequestParam("comment_content") String commentContent,
+                                         @RequestParam("userId") long userId,
+                                         @RequestParam("memeId") long memeId,
+                                         @RequestParam("url") String url) {
+        uiActionsService.updateComments(new UiCommentActionDAO(memeId, userId, url, commentContent));
+        return "redirect:" + url;
     }
 }

@@ -74,6 +74,7 @@
 			<input style="margin-bottom: 4px; height: 20px;" type="text" name="title" id="title">
 			<p style="margin-bottom: 2px;">Meme:</p>
 			<input type="file" name="image" accept="image/*" class="form-control-file">
+			<input type="hidden" name="userId" th:value="${sessionUserId}">
 
 			<input class="submit-button" type="submit" value="Submit">
 		</form>

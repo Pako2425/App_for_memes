@@ -237,40 +237,40 @@
 </head>
 
 <body>
-<div class="page_content">
-    <div class="header">
-        <p class="header-buttons">
-            <a href="/"><button class="header-button"><span class="header-text">Memy</span></button></a>
-            <a href="/random"><button class="header-button"><span class="header-text">Losuj</span></button></a>
-            <a href="/add_meme"><button class="header-button"><span class="header-text">Dodaj</span></button></a>
-            <a th:if="${isAuthenticated}" th:href="@{/logout}"><button class="header-button"><span class="header-text">Wyloguj się</span></button></a>
-            <a th:unless="${isAuthenticated}" th:href="@{/login}"><button class="header-button"><span class="header-text">Zaloguj się</span></button></a>
-        </p>
-    </div>
-
-    <div th:each="post : ${post}">
-        <div class="mem">
-            <div class="user-profile" style="margin-left: 10px; margin-top: 10px;">
-                <button class="user-profile-button">
-                    <img style="display: inline-block; vertical-align: middle;" src="/static/person.svg" width="48px" height="48px">
-                    <span class="user-profile-text"><span th:text="${post.username}"></span></span>
-                </button>
-            </div>
-            <div class="mem-tytul">
-                <p class="title-text"><span th:text="${post.title}"></span></p>
-            </div>
-            <div class="mem-obrazek">
-                <img class="image" th:src="${post.imagePath}">
-            </div>
-
+    <div class="page_content">
+        <div class="header">
+            <p class="header-buttons">
+                <a href="/"><button class="header-button"><span class="header-text">Memy</span></button></a>
+                <a href="/random"><button class="header-button"><span class="header-text">Losuj</span></button></a>
+                <a href="/add_meme"><button class="header-button"><span class="header-text">Dodaj</span></button></a>
+                <a th:if="${isAuthenticated}" th:href="@{/logout}"><button class="header-button"><span class="header-text">Wyloguj się</span></button></a>
+                <a th:unless="${isAuthenticated}" th:href="@{/login}"><button class="header-button"><span class="header-text">Zaloguj się</span></button></a>
+            </p>
         </div>
-        <div class="ui-actions">
-            <div class="ui-actions-container">
+
+        <div th:each="post : ${post}">
+            <div class="mem">
+                <div class="user-profile" style="margin-left: 10px; margin-top: 10px;">
+                    <button class="user-profile-button">
+                        <img style="display: inline-block; vertical-align: middle;" src="/static/person.svg" width="48px" height="48px">
+                        <span class="user-profile-text"><span th:text="${post.username}"></span></span>
+                    </button>
+                </div>
+                <div class="mem-tytul">
+                    <p class="title-text"><span th:text="${post.title}"></span></p>
+                </div>
+                <div class="mem-obrazek">
+                    <img class="image" th:src="${post.imagePath}">
+                </div>
+
+            </div>
+            <div class="ui-actions">
+                <div class="ui-actions-container">
 
                     <span th:if="${isAuthenticated}">
                         <form  style="display: inline-block;" th:action=@{/ui_actions_favorite} method="post">
                             <input type="hidden" name="memeId" th:value="${post.memeId}">
-                            <input type="hidden" name="userId" th:value="${userId}">
+                            <input type="hidden" name="userId" th:value="${sessionUserId}">
                             <input type="hidden" name="url" th:value="'/meme/' + ${post.memeId}">
                             <button class="favorite-button">
                                 <span th:if="${post.isLiked}">
@@ -283,45 +283,45 @@
                             </button>
                         </form>
                     </span>
-                <span th:unless="${isAuthenticated}">
+                    <span th:unless="${isAuthenticated}">
                         <a th:href="@{'/login'}">
                             <button class="favorite-button"><img style="vertical-align: middle;" src="/static/favorite_outline.svg"><span style="vertical-align: middle;" th:text="${post.likesNumber}"></span></button></a>
                     </span>
-                <img style="vertical-align: middle;" src="/static/comment.svg"><span style="vertical-align: middle;">12</span>
-                <a th:href="@{${post.imagePath}}"><button class="download-button"><img style="vertical-align: middle;" src="/static/download.svg"></button>
-                </a>
+                    <img style="vertical-align: middle;" src="/static/comment.svg"><span style="vertical-align: middle;" th:text="${post.commentsNumber}"></span>
+                    <a th:href="@{${post.imagePath}}"><button class="download-button"><img style="vertical-align: middle;" src="/static/download.svg"></button>
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <div class="comments-section">
-            <div class="add-comment-section">
+            <div class="comments-section">
+                <div class="add-comment-section">
                     <span th:if="${isAuthenticated}">
                         <form style="display: inline-block;" th:action=@{/ui_actions_comment} method="post">
                             <input type="hidden" name="memeId" th:value="${post.memeId}">
-                            <input type="hidden" name="userId" th:value="${userId}">
+                            <input type="hidden" name="userId" th:value="${sessionUserId}">
                             <input type="hidden" name="url" th:value="'/meme/' + ${post.memeId}">
                             <textarea style="vertical-align: middle; width: 600px;" placeholder="Add a comment..." name="comment_content"></textarea>
                             <button class="post-comment-button">POST</button>
                         </form>
                     </span>
-                <span th:unless="${isAuthenticated}">
+                    <span th:unless="${isAuthenticated}">
                         <textarea style="vertical-align: middle; width: 600px;" placeholder="Add a comment..."></textarea>
                         <a th:href="@{'/login'}"><button class="post-comment-button">POST</button></a>
                     </span>
-            </div>
-            <div th:each="comment : ${post.comments}">
-                <div class="comment" style="margin-left: 6px; margin-top: 6px; margin-bottom: 6px;">
-                    <div class="comment-naglowek">
-                        <img src="/static/person.svg" style="vertical-align: middle;">
-                        <span style="vertical-align: middle;" th:text="${post.username}"></span>
-                    </div>
-                    <div class="comment-tresc" style="margin-left: 10px; width: 600px;">
-                        <span th:text="${comment.content}"></span>
+                </div>
+                <div th:each="comment : ${post.comments}">
+                    <div class="comment" style="margin-left: 6px; margin-top: 6px; margin-bottom: 6px;">
+                        <div class="comment-naglowek">
+                            <img src="/static/person.svg" style="vertical-align: middle;">
+                            <span style="vertical-align: middle;" th:text="${comment.username}"></span>
+                        </div>
+                        <div class="comment-tresc" style="margin-left: 10px; width: 600px;">
+                            <span th:text="${comment.content}"></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

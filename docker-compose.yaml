@@ -1,5 +1,7 @@
 version: '3'
 services:
+
+
   database:
     container_name: 'database'
     image: mysql:8.0.36
@@ -15,3 +17,5 @@ services:
       dockerfile: Dockerfile_webapp
     ports:
       - "8080:8080"
+    depends_on:
+      - database

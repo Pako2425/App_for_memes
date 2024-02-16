@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name="comments")
 public class Comment {
@@ -12,13 +13,13 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long memeId;
-    private long userId;
+    private String username;
     private String content;
     private long parentCommentId;
 
-    public Comment(long memeId, long userId, String content, long parentCommentId) {
+    public Comment(long memeId, String username, String content, long parentCommentId) {
         this.memeId = memeId;
-        this.userId = userId;
+        this.username = username;
         this.content = content;
         this.parentCommentId = parentCommentId;
     }
